@@ -1,4 +1,9 @@
-"""Database access layer using aiomysql.`n`nContains schema initialization, settings management, and query helpers.`n"""
+"""
+Database access layer using aiomysql.
+
+Contains schema initialization, settings management,
+and query helpers.
+"""
 
 from __future__ import annotations
 
@@ -10,6 +15,7 @@ import aiomysql
 from app.config import Config
 
 SCHEMA_VERSION = 1
+س
 
 
 class Database:

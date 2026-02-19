@@ -1,7 +1,7 @@
 ﻿# Crypto Signal Bot
 
 ![Python](https://img.shields.io/badge/python-3.11%2B-blue)
-![CI](https://github.com/OWNER/REPO/actions/workflows/ci.yml/badge.svg)
+[![CI](https://github.com/Amin-Ettefagh/BreakoBot/actions/workflows/ci.yml/badge.svg)](https://github.com/Amin-Ettefagh/BreakoBot/actions)
 ![License](https://img.shields.io/badge/license-MIT-green)
 
 A production-grade Telegram trading-signal bot that delivers scheduled spot analysis, real-time futures breakout alerts, and role-based access management. Built with aiogram v3 and MariaDB, it is designed for reliability, extensibility, and safe operations in both local and Docker environments.

@@ -1,1 +1,1 @@
-﻿"""Telegram handlers."""
+"""Telegram handlers."""

@@ -1,10 +1,10 @@
-﻿"""Futures breakout watcher for Extreme users."""
+"""Futures breakout watcher for Extreme users."""
+
 from __future__ import annotations
 
 import asyncio
 import logging
 import time
-from typing import Dict, Optional, Tuple
 
 from app.config import Config
 from app.services.mexc_api import MexcClient
@@ -29,9 +29,9 @@ class FuturesBreakoutWatcher:
         self._mexc = mexc
         self._sender = sender
         self._bridge = bridge
-        self._already_alerted: Dict[str, Tuple[float, float]] = {}
+        self._already_alerted: dict[str, tuple[float, float]] = {}
 
-    async def check_breakout(self, symbol: str) -> Optional[str]:
+    async def check_breakout(self, symbol: str) -> str | None:
         lookback = self._config.futures_breakout_lookback
         candles = await self._mexc.get_candles(symbol, "1m", limit=lookback + 3)
         if len(candles) < lookback + 1:
@@ -75,7 +75,3 @@ class FuturesBreakoutWatcher:
                 except Exception as exc:
                     logger.warning("Breakout error %s: %s", symbol, exc)
             await asyncio.sleep(self._config.futures_breakout_seconds)
-
-
-
-

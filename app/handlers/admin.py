@@ -1,9 +1,8 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import csv
 import io
 from datetime import datetime, timedelta
-from typing import List, Tuple
 
 from aiogram import F, Router
 from aiogram.filters import Command
@@ -149,9 +148,7 @@ async def admin_callbacks(
 
 
 @router.message(AdminStates.waiting_add_user)
-async def admin_add_user(
-    message: Message, state: FSMContext, db: Database, config: Config
-) -> None:
+async def admin_add_user(message: Message, state: FSMContext, db: Database, config: Config) -> None:
     try:
         if not is_admin(message.from_user.id, config):
             raise PermissionError("Not an admin")

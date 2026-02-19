@@ -1,4 +1,5 @@
-﻿import pandas as pd
+import pandas as pd
+
 from app.services.analysis import calculate_ema, calculate_macd, calculate_rsi, detect_breakout
 
 

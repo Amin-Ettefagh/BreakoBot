@@ -1,1 +1,1 @@
-﻿"""Application package for the crypto signal bot."""
+"""Application package for the crypto signal bot."""

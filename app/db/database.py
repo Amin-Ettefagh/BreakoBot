@@ -1,13 +1,13 @@
-﻿"""Database access layer using aiomysql.`n`nContains schema initialization, settings management, and query helpers.`n"""
+"""Database access layer using aiomysql.`n`nContains schema initialization, settings management, and query helpers.`n"""
+
 from __future__ import annotations
 
 from datetime import datetime
-from typing import Any, Dict, List, Optional, Tuple
+from typing import Any
 
 import aiomysql
 
 from app.config import Config
-
 
 SCHEMA_VERSION = 1
 
@@ -17,7 +17,7 @@ class Database:
 
     def __init__(self, config: Config) -> None:
         self._config = config
-        self.pool: Optional[aiomysql.Pool] = None
+        self.pool: aiomysql.Pool | None = None
 
     async def connect(self) -> None:
         self.pool = await aiomysql.create_pool(
@@ -146,7 +146,7 @@ class Database:
         if await self.get_setting("default_free_limit") is None:
             await self.set_setting("default_free_limit", str(self._config.default_free_limit))
 
-    async def add_user_if_not_exists(self, telegram_id: int, username: Optional[str]) -> None:
+    async def add_user_if_not_exists(self, telegram_id: int, username: str | None) -> None:
         default_limit = await self.get_default_free_limit()
         q = """
             INSERT INTO users (telegram_id, username, daily_free_limit)
@@ -158,7 +158,7 @@ class Database:
             async with conn.cursor() as cur:
                 await cur.execute(q, (telegram_id, username, default_limit))
 
-    async def get_user(self, telegram_id: int) -> Optional[Dict[str, Any]]:
+    async def get_user(self, telegram_id: int) -> dict[str, Any] | None:
         q = "SELECT * FROM users WHERE telegram_id=%s"
         pool = self._require_pool()
         async with pool.acquire() as conn:
@@ -166,7 +166,7 @@ class Database:
                 await cur.execute(q, (telegram_id,))
                 return await cur.fetchone()
 
-    async def set_role(self, telegram_id: int, role: str, expire_at: Optional[datetime]) -> None:
+    async def set_role(self, telegram_id: int, role: str, expire_at: datetime | None) -> None:
         q = "UPDATE users SET role=%s, expire_at=%s, is_active=1 WHERE telegram_id=%s"
         pool = self._require_pool()
         async with pool.acquire() as conn:
@@ -180,7 +180,7 @@ class Database:
             async with conn.cursor() as cur:
                 await cur.execute(q, (telegram_id,))
 
-    async def fetch_active_users_by_role(self, role: str) -> List[Dict[str, Any]]:
+    async def fetch_active_users_by_role(self, role: str) -> list[dict[str, Any]]:
         q = """
             SELECT * FROM users
             WHERE role=%s AND is_active=1
@@ -192,7 +192,7 @@ class Database:
                 await cur.execute(q, (role,))
                 return await cur.fetchall()
 
-    async def fetch_all_active_users(self) -> List[Dict[str, Any]]:
+    async def fetch_all_active_users(self) -> list[dict[str, Any]]:
         q = """
             SELECT * FROM users
             WHERE is_active=1 AND (expire_at IS NULL OR expire_at > NOW())
@@ -229,7 +229,7 @@ class Database:
             async with conn.cursor() as cur:
                 await cur.execute(q, (coin, s_type, text, target))
 
-    async def get_last_logs(self, limit: int = 10) -> List[Tuple]:
+    async def get_last_logs(self, limit: int = 10) -> list[tuple]:
         q = "SELECT coin, type, target_group, created_at FROM signals_log ORDER BY id DESC LIMIT %s"
         pool = self._require_pool()
         async with pool.acquire() as conn:
@@ -264,7 +264,7 @@ class Database:
             async with conn.cursor() as cur:
                 await cur.execute(q, (coin, rsi, macd, ema20, ema50, volume, breakout))
 
-    async def fetch_expired_users(self) -> List[Dict[str, Any]]:
+    async def fetch_expired_users(self) -> list[dict[str, Any]]:
         q = "SELECT * FROM users WHERE expire_at IS NOT NULL AND expire_at <= NOW()"
         pool = self._require_pool()
         async with pool.acquire() as conn:
@@ -272,7 +272,7 @@ class Database:
                 await cur.execute(q)
                 return await cur.fetchall()
 
-    async def count_users_by_role(self) -> List[Tuple[str, int]]:
+    async def count_users_by_role(self) -> list[tuple[str, int]]:
         q = "SELECT role, COUNT(*) FROM users GROUP BY role"
         pool = self._require_pool()
         async with pool.acquire() as conn:
@@ -289,7 +289,7 @@ class Database:
                 row = await cur.fetchone()
                 return int(row[0]) if row else 0
 
-    async def top_coins_by_signals(self, limit: int = 5) -> List[Tuple[str, int]]:
+    async def top_coins_by_signals(self, limit: int = 5) -> list[tuple[str, int]]:
         q = (
             "SELECT coin, COUNT(*) as cnt FROM signals_log "
             "WHERE created_at >= (NOW() - INTERVAL 1 DAY) "
@@ -301,7 +301,7 @@ class Database:
                 await cur.execute(q, (limit,))
                 return await cur.fetchall()
 
-    async def export_signals_log(self, limit: int = 500) -> List[Tuple]:
+    async def export_signals_log(self, limit: int = 500) -> list[tuple]:
         q = (
             "SELECT coin, type, target_group, created_at, signal_text "
             "FROM signals_log ORDER BY id DESC LIMIT %s"
@@ -312,7 +312,7 @@ class Database:
                 await cur.execute(q, (limit,))
                 return await cur.fetchall()
 
-    async def get_setting(self, key: str) -> Optional[str]:
+    async def get_setting(self, key: str) -> str | None:
         q = "SELECT setting_value FROM settings WHERE setting_key=%s"
         pool = self._require_pool()
         async with pool.acquire() as conn:
@@ -343,4 +343,3 @@ class Database:
 
     async def set_default_free_limit(self, limit: int) -> None:
         await self.set_setting("default_free_limit", str(max(limit, 0)))
-

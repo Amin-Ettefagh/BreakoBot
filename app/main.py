@@ -1,4 +1,5 @@
-﻿"""Application entrypoint for the crypto signal bot."""
+"""Application entrypoint for the crypto signal bot."""
+
 from __future__ import annotations
 
 import asyncio

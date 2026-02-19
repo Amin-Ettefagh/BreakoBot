@@ -1,11 +1,9 @@
-﻿from __future__ import annotations
-
-from typing import List
+from __future__ import annotations
 
 from app.services.analysis import AnalysisResult
 
 
-def naive_entry_tp_sl(last_close: float) -> tuple[float, List[float], float]:
+def naive_entry_tp_sl(last_close: float) -> tuple[float, list[float], float]:
     """Simple TP/SL generator for MVP signals."""
     entry = last_close
     tps = [entry * 1.005, entry * 1.01, entry * 1.015]
@@ -14,7 +12,7 @@ def naive_entry_tp_sl(last_close: float) -> tuple[float, List[float], float]:
 
 
 def format_spot_signal(
-    result: AnalysisResult, entry: float, tp_list: List[float], sl: float
+    result: AnalysisResult, entry: float, tp_list: list[float], sl: float
 ) -> str:
     lines = [
         f"{result.symbol} - SPOT SIGNAL",

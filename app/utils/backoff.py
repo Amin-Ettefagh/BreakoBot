@@ -1,6 +1,6 @@
-﻿import asyncio
+import asyncio
 import random
-from typing import Awaitable, Callable, Tuple, Type
+from collections.abc import Awaitable, Callable
 
 
 async def retry_async(
@@ -9,7 +9,7 @@ async def retry_async(
     retries: int,
     base_delay: float,
     max_delay: float,
-    retry_exceptions: Tuple[Type[BaseException], ...],
+    retry_exceptions: tuple[type[BaseException], ...],
 ) -> object:
     """Retry an async callable with exponential backoff and jitter."""
     last_exc: BaseException | None = None
@@ -20,7 +20,7 @@ async def retry_async(
             last_exc = exc
             if attempt >= retries:
                 break
-            delay = min(max_delay, base_delay * (2 ** attempt))
+            delay = min(max_delay, base_delay * (2**attempt))
             delay = delay * (0.5 + random.random())
             await asyncio.sleep(delay)
     if last_exc is None:

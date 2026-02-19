@@ -1,8 +1,7 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
-from dataclasses import dataclass
 import os
-from typing import List, Set
+from dataclasses import dataclass
 
 from dotenv import load_dotenv
 
@@ -15,8 +14,8 @@ from app.utils.validators import (
 )
 
 
-def _parse_admins(raw: str) -> Set[int]:
-    admins: Set[int] = set()
+def _parse_admins(raw: str) -> set[int]:
+    admins: set[int] = set()
     for item in parse_csv(raw):
         try:
             admins.add(int(item))
@@ -43,8 +42,8 @@ class Config:
     futures_breakout_cooldown_seconds: int
 
     default_free_limit: int
-    admins: Set[int]
-    coins_list: List[str]
+    admins: set[int]
+    coins_list: list[str]
 
     log_level: str
     log_dir: str | None
@@ -207,7 +206,7 @@ def load_config() -> Config:
     )
 
 
-def reload_coins(config: Config, new_value: str | None = None) -> List[str]:
+def reload_coins(config: Config, new_value: str | None = None) -> list[str]:
     """Reload coins list either from a provided string or from env."""
     if new_value is None:
         load_dotenv(override=True)

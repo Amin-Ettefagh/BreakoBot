@@ -1,4 +1,5 @@
-﻿from datetime import datetime, time as dtime, timedelta
+from datetime import datetime, timedelta
+from datetime import time as dtime
 
 
 def seconds_until_next_midnight() -> float:

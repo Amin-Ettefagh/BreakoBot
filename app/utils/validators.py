@@ -1,6 +1,6 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
-from typing import Iterable, List
+from collections.abc import Iterable
 
 
 def parse_int(value: str | None, default: int) -> int:
@@ -32,7 +32,7 @@ def parse_bool(value: str | None, default: bool = False) -> bool:
     return default
 
 
-def parse_csv(value: str | None) -> List[str]:
+def parse_csv(value: str | None) -> list[str]:
     if not value:
         return []
     return [item.strip() for item in value.split(",") if item.strip()]
@@ -51,7 +51,7 @@ def validate_interval(interval: str, allowed: Iterable[str]) -> str:
     return interval
 
 
-def parse_coins_list(raw: str | None) -> List[str]:
+def parse_coins_list(raw: str | None) -> list[str]:
     coins = parse_csv(raw)
     if not coins:
         raise ValueError("COINS_LIST must include at least one symbol")

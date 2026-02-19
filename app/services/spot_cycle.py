@@ -1,4 +1,5 @@
-﻿"""Spot signal cycle runner."""
+"""Spot signal cycle runner."""
+
 from __future__ import annotations
 
 import asyncio
@@ -61,5 +62,3 @@ class SpotSignalCycle:
             logger.info("Spot cycle tick")
             await self.run_once()
             await asyncio.sleep(self._config.spot_cycle_seconds)
-
-

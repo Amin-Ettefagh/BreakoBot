@@ -1,1 +1,1 @@
-﻿"""Service layer."""
+"""Service layer."""

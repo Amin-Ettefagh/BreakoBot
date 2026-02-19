@@ -1,4 +1,4 @@
-﻿import asyncio
+import asyncio
 import logging
 
 from app.config import Config
@@ -19,5 +19,3 @@ async def daily_reset_task(db: Database, config: Config) -> None:
             logger.info("Daily free limits reset to %s", config.default_free_limit)
         except Exception as exc:
             logger.warning("Daily reset failed: %s", exc)
-
-

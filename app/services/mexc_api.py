@@ -1,9 +1,9 @@
-﻿"""MEXC API client with resilience and throttling."""
+"""MEXC API client with resilience and throttling."""
+
 from __future__ import annotations
 
 import asyncio
 import logging
-from typing import Dict, List
 
 import aiohttp
 
@@ -51,14 +51,14 @@ class MexcClient:
 
     async def get_candles(
         self, symbol: str, interval: str = "1h", limit: int = 120
-    ) -> List[Dict[str, float]]:
+    ) -> list[dict[str, float]]:
         validate_interval(interval, INTERVAL_MAP.keys())
         url = self._config.mexc_base_url.rstrip("/") + MEXC_KLINE_PATH
         params = {"symbol": symbol, "interval": interval, "limit": limit}
 
         await self._throttle()
 
-        async def _fetch() -> List[Dict[str, float]]:
+        async def _fetch() -> list[dict[str, float]]:
             session = self._require_session()
             async with session.get(url, params=params) as resp:
                 if resp.status != 200:
@@ -91,9 +91,7 @@ class MexcClient:
             )
             return result
         except Exception as exc:
-            logger.warning(
-                "mexc_call_failed symbol=%s interval=%s error=%s", symbol, interval, exc
-            )
+            logger.warning("mexc_call_failed symbol=%s interval=%s error=%s", symbol, interval, exc)
             raise
 
     async def _throttle(self) -> None:
@@ -107,8 +105,3 @@ class MexcClient:
             if elapsed < min_interval:
                 await asyncio.sleep(min_interval - elapsed)
             self._last_request_ts = asyncio.get_event_loop().time()
-
-
-
-
-

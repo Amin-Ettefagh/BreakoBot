@@ -1,1 +1,1 @@
-﻿"""Utility helpers."""
+"""Utility helpers."""

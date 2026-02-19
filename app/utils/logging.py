@@ -1,10 +1,9 @@
-﻿import logging
+import logging
 import os
 from logging.handlers import TimedRotatingFileHandler
-from typing import Optional
 
 
-def setup_logging(log_level: str, log_dir: Optional[str], retention_days: int) -> None:
+def setup_logging(log_level: str, log_dir: str | None, retention_days: int) -> None:
     """Configure console + daily rotating file logs."""
     level = getattr(logging, (log_level or "INFO").upper(), logging.INFO)
 

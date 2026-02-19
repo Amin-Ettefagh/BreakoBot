@@ -1,9 +1,9 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import asyncio
 import logging
 import os
-from typing import Any, Dict, Optional
+from typing import Any
 
 import aiohttp
 from fastapi import FastAPI, Header, HTTPException
@@ -40,7 +40,7 @@ class TraderBridge:
             raise RuntimeError("TraderBridge session not initialized")
         return self._session
 
-    async def send_signal(self, payload: Dict[str, Any]) -> bool:
+    async def send_signal(self, payload: dict[str, Any]) -> bool:
         """Send payload to configured webhook. Returns True if delivered."""
         if not self.enabled:
             return False
@@ -75,16 +75,16 @@ class TraderBridge:
             return False
 
 
-def create_bridge_app(shared_secret: Optional[str] = None) -> FastAPI:
+def create_bridge_app(shared_secret: str | None = None) -> FastAPI:
     """Create a minimal FastAPI webhook receiver for external auto-traders."""
 
     app = FastAPI(title="Trader Bridge", version="1.0.0")
 
     @app.post("/webhook")
     async def webhook(
-        payload: Dict[str, Any],
-        x_bridge_token: Optional[str] = Header(default=None, alias="X-Bridge-Token"),
-    ) -> Dict[str, Any]:
+        payload: dict[str, Any],
+        x_bridge_token: str | None = Header(default=None, alias="X-Bridge-Token"),
+    ) -> dict[str, Any]:
         if shared_secret:
             if not x_bridge_token or x_bridge_token != shared_secret:
                 raise HTTPException(status_code=401, detail="Invalid bridge token")

@@ -1,11 +1,11 @@
-﻿"""Telegram message sending with retries, throttling, and safeguards."""
+"""Telegram message sending with retries, throttling, and safeguards."""
+
 from __future__ import annotations
 
 import asyncio
 import logging
 import time
 from datetime import datetime
-from typing import Set
 
 from aiogram import Bot
 
@@ -52,7 +52,7 @@ class SignalSender:
                 last_exc = exc
 
             if attempt < retries:
-                delay = min(5.0, base_delay * (2 ** attempt))
+                delay = min(5.0, base_delay * (2**attempt))
                 await asyncio.sleep(delay)
 
         if last_exc:
@@ -99,7 +99,7 @@ class SignalSender:
             raise RuntimeError("Duplicate broadcast detected. Try again later.")
 
         users = await self._db.fetch_all_active_users()
-        seen: Set[int] = set()
+        seen: set[int] = set()
         sent = 0
 
         for u in users:
@@ -143,8 +143,3 @@ class SignalSender:
         if hash(text) != self._last_broadcast_hash:
             return False
         return now - self._last_broadcast_at < window
-
-
-
-
-

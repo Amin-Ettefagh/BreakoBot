@@ -1,4 +1,4 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 import html
 
@@ -45,14 +45,7 @@ async def start_cmd(message: Message, db: Database, config: Config) -> None:
     full_name = html.escape(message.from_user.full_name or "User")
     expire_text = expire if expire else "No expiry"
     await message.answer(
-        "Hello {name}!\n"
-        "Access level: <b>{role}</b>\n"
-        "Expire at: {expire}{extra}".format(
-            name=full_name,
-            role=role.upper(),
-            expire=expire_text,
-            extra=extra,
-        )
+        f"Hello {full_name}!\nAccess level: <b>{role.upper()}</b>\nExpire at: {expire_text}{extra}"
     )
 
 
@@ -73,11 +66,7 @@ async def profile_cmd(message: Message, db: Database, config: Config) -> None:
         extra = f"\nDaily remaining signals: {user['daily_free_limit']}"
 
     expire_text = user["expire_at"] if user["expire_at"] else "No expiry"
-    txt = (
-        "Profile\n"
-        f"Access level: <b>{user['role'].upper()}</b>\n"
-        f"Expire at: {expire_text}{extra}"
-    )
+    txt = f"Profile\nAccess level: <b>{user['role'].upper()}</b>\nExpire at: {expire_text}{extra}"
     await message.answer(txt, reply_markup=back_to_menu_kb())
 
 

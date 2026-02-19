@@ -1,7 +1,6 @@
-﻿from __future__ import annotations
+from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Tuple
 
 import numpy as np
 import pandas as pd
@@ -27,7 +26,7 @@ def calculate_ema(series: pd.Series, period: int) -> pd.Series:
 
 def calculate_macd(
     series: pd.Series, fast: int = 12, slow: int = 26, signal: int = 9
-) -> Tuple[pd.Series, pd.Series]:
+) -> tuple[pd.Series, pd.Series]:
     ema_fast = series.ewm(span=fast, adjust=False).mean()
     ema_slow = series.ewm(span=slow, adjust=False).mean()
     macd = ema_fast - ema_slow

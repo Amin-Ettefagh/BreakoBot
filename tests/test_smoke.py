@@ -1,4 +1,4 @@
-﻿import asyncio
+import asyncio
 
 from app.config import load_config
 from app.db.database import Database

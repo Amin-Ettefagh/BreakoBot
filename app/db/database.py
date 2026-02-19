@@ -16,6 +16,7 @@ from app.config import Config
 
 SCHEMA_VERSION = 1
 
+
 class Database:
     """Thin wrapper around aiomysql pool with helper queries."""
 
